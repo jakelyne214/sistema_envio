@@ -233,6 +233,7 @@
                                                     <th>Estado</th>
                                                     <th>PDF</th>
                                                     <th>Editar</th>
+                                                    <th>QR</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody>
@@ -274,8 +275,31 @@
                                                                 </a>
                                                             @endif
                                                         </th>
+                                                        <td>
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#qrModal{{ $envio->id }}">
+        QR
+    </button>
+</td>
                                                     </tr>
                                                     @endforeach
+
+                                                    @foreach($envios as $envio)
+    <!-- Modal para el código QR -->
+    <div class="modal fade" id="qrModal{{ $envio->id }}" tabindex="-1" aria-labelledby="qrModalLabel{{ $envio->id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qrModalLabel{{ $envio->id }}">Código QR del Envío {{ $envio->codigo }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    {!! QrCode::size(250)->generate(route('admin.envio.show', $envio->id)) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
                                                 </tbody>
                                               </table>
                                         </div>

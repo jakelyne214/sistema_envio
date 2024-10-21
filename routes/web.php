@@ -33,3 +33,4 @@ Route::get('/logout',[ConnectContreoller::class, 'getLogout']);
 
 Route::get('/escanear/{codigo_qr}', [EnviosController::class, 'escanearQr'])->name('envio.escanear');
 Route::patch('/envios/{envio}/actualizar-estado', [EnviosController::class, 'getStadoRecepcion'])->name('envio.actualizarEstado');
+Route::get('/admin/envio/{id}', [EnviosController::class, 'show'])->name('admin.envio.show');

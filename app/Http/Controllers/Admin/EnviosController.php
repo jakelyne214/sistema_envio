@@ -15,6 +15,7 @@ use \PDF;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Envio;
 
 
 
@@ -36,6 +37,8 @@ class EnviosController extends Controller
                                         ->whereIn('envios.estado', [0, 1])
                                         ->distinct()
                                         ->get(['vehiculos.*']);
+
+                                        $envios = Envios::all();
 
         $data = ['departamentos' => $departamentos,'sucursales' => $sucursales,'vehiculos' => $vehiculos,'vehiculosEnEnvios' => $vehiculosEnEnvios];
         return view('admin.envios.home',$data);
@@ -104,12 +107,14 @@ class EnviosController extends Controller
                 Storage::put('public/codigosqr/'.$envios->id.'.svg', $codigoQr);
                 DB::insert('insert into historial_envio (user_id, accion,created_at) values (?, ?, ?)', [$user, $audit,$date_zone]);
                 DB::insert('insert into auditoria (user_id, homework,created_at) values (?, ?, ?)', [$user, $audit_envio,$date_zone]);
+                $codigoQr = QrCode::size(300)->generate(route('admin.envio.show', $envios->id));
+                Storage::put('public/codigosqr/'.$envios->id.'.svg', $codigoQr);
                 //HISTORIAL ENVIOS AGREGAR 
                 return back()->with('message','Se Guardo con exito el envio')->with('typealert','info ');
             endif; 
         endif;
     }
-    
+
     private function generarCodigoQrUnico()
 {
     return uniqid('ENV-', true);
@@ -153,6 +158,12 @@ public function escanearQr($codigo_qr)
             return back()->with('message','Se Guardo con exito')->with('typealert','info ');
         endif;
     }
+
+    public function show($id)
+{
+    $envio = Envios::findOrFail($id);
+    return view('admin.envios.show', compact('envio'));
+}
     
     public function getEnviosEdit($id){
         $departamentos = DB::table('departamentos')->get();

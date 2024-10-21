@@ -17,6 +17,7 @@
                 @csrf
                 @method('PATCH')
                 <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+                
             </form>
         </div>
     </div>
