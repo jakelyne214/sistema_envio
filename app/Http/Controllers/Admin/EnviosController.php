@@ -225,8 +225,13 @@ public function escanearQr($codigo_qr)
 
     public function generatePDF($id){
         $envio = Envios::findOrFail($id);
-        $pdf = FacadePdf::loadView('admin.envios.vista',['envio' => $envio])->setPaper('8.5x14');
-        return $pdf->stream('Clientes.pdf');
+        $qrCode = base64_encode(QrCode::format('svg')->size(100)->errorCorrection('H')->generate(route('admin.envio.show', $envio->id)));
+        $customPaper = array(0, 0, 226.77, 614.89);
+        $pdf = FacadePdf::loadView('admin.envios.ticket', [
+            'envio' => $envio,
+            'qrCode' => $qrCode
+        ])->setPaper($customPaper, 'portrait');
+        return $pdf->stream('Ticket_' . $envio->codigo . '.pdf');
     }
 
     //RECEPCION

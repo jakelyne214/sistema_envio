@@ -231,7 +231,7 @@
                                                     <th>Peso</th>
                                                     <th>Contraseña</th>
                                                     <th>Estado</th>
-                                                    <th>PDF</th>
+                                                    <th>Ticket</th>
                                                     <th>Editar</th>
                                                     <th>QR</th>
                                                   </tr>
@@ -266,7 +266,7 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            <a href="{{ url('admin/envio/' . $envio->id . '/pdf') }}" target="_blank" class="btn btn-primary btn-sm"> PDF</a>
+                                                            <a href="{{ url('admin/envio/' . $envio->id . '/pdf') }}" target="_blank" class="btn btn-primary btn-sm"> Ticket</a>
                                                         </td>
                                                         <th>
                                                             @if(kvfj(Auth::user()->permissions,'edit_envios'))
